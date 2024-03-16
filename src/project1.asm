@@ -44,8 +44,8 @@
 ;     rst $10
 ;     ret
 
-ATTR_S: equ $5c8d               ; Format: FLASH, BRIGHT, PAPER, INK (FBPPPIII)
-ATTR_T: equ $5c8f               ; System variables: current attribute (FBPPPIII)
+ATTR_S:     equ $5c8d               ; Format: FLASH, BRIGHT, PAPER, INK (FBPPPIII)
+ATTR_T:     equ $5c8f               ; System variables: current attribute (FBPPPIII)
 
 ; --------------------------------------------------------------
 ; ROM Routine similiar to Basic AT
@@ -56,16 +56,18 @@ ATTR_T: equ $5c8f               ; System variables: current attribute (FBPPPIII)
 ; is (24, 33).
 ; Alters the value of A, DE and HL registers.
 ; ---------------------------------------------------------------
-; LOCATE:   equ $0dd9
+LOCATE:   equ $0dd9
 ; ---------------------------------------------------------------
 ; ROM routine similair to Basic's CLS.
 ; Clear the display using the attribute loaded in the system 
 ; variable ATTR_S. Alters the value of the AF, BC, DE and HL 
 ; registers.
 ; -----------------------------------------------------------------
+CLS:    equ $0daf
 
-
-Start:
+Main:
+    ld a, $0e               ; A = color attributes
+    ld hl, ATTR_T           ; Load into memory
 
 
 
@@ -77,7 +79,7 @@ Start:
 
     ; This sets the name of the project, the start address,
     ; and the initial stack pointer
-    SAVENEX OPEN "project1.nex", Start, $ff40
+    SAVENEX OPEN "project1.nex", Main, $ff40
 
     ; This asserts the minimum core version. Set it to the core version
     ; and the initial stack pointer

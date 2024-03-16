@@ -44,32 +44,23 @@
 ;     rst $10
 ;     ret
 
-ATTR_S: equ $5c8d               ; Format: FLASH, BRIGHT, PAPER, INK (FBPPPIII)
-ATTR_T: equ $5c8f               ; System variables: current attribute (FBPPPIII)
-
-; --------------------------------------------------------------
-; ROM Routine similiar to Basic AT
-; Position the cursor at the specified coordinates.
-; Input: B -> Y-coordinate.
-;        C -> X-coordinate.
-; In this routine, the top left-hand corner of the screem
-; is (24, 33).
-; Alters the value of A, DE and HL registers.
-; ---------------------------------------------------------------
-; LOCATE:   equ $0dd9
-; ---------------------------------------------------------------
-; ROM routine similair to Basic's CLS.
-; Clear the display using the attribute loaded in the system 
-; variable ATTR_S. Alters the value of the AF, BC, DE and HL 
-; registers.
-; -----------------------------------------------------------------
-
-
 Start:
+    ld hl, Msg
+    CALL Loop
 
+Loop:
+    ld a, (hl)         ; loads a character from the string
+    or a                ; A or A = 0 only if A = 0 (a will equal 0 if = 0)
+    jr z, Exit          ; if A = 0, jump to the Exit label
+    rst $10             ; paints the character
+    inc hl              ; HL = next character
+    jr Loop             ; returns to the beginning of the loop
 
+Exit:                   
+    ret                 ; exists the programme
 
-
+Msg:
+    defm 'Hello Joe how are you', $00
 
 ;;
 ;; Set up the Next output
